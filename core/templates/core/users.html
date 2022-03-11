@@ -1,0 +1,249 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+{{kr}}
+<h5 class="h5 mb-2 text-gray-800">User List [Total Users : {{ pre.paginator.count }}]</h5>
+                    <h1 class="h3 mb-2 text-gray-800">PYF Users</h1>
+                    <form method="get" >
+                    <div class="row">
+                      <div class="col-md-2">
+                      
+                        <div class="form-group">
+                          Start Date:
+                          <input type="date" name="searchname" class="form-control" value="{{st}}">
+                        </div>
+                        </div>
+                        
+                          <div class="col-md-2">
+                            <div class="form-group">
+                          End Date:
+                          <input type="date" name="searchend" value="{{mt}}" class="form-control">
+                          </div>
+                          </div>
+                          
+                          
+                            <div class="col-md-2">
+                              <div class="form-group">
+                          User Name:
+                          <input type="Text" name="username" value="{{rt}}" class="form-control">
+                          </div>
+                          </div>
+                        
+                        
+                          <div class="col-md-2">
+                            <div class="form-group">
+                          Select By:
+                          <Select class="form-control" name="searchh">
+                            <option value="">Select</option>
+                            
+                            <option value="{% if is_user_verified %}0{%else%}1{%endif%}"{% if is_user_verified == gt %} selected="selected" {% endif %}>Verified</option>
+                            <option value="{% if is_user_verified %}1{%else%}0{%endif%}"{% if is_user_verified == gt %} selected="selected" {% endif %}>Not Verified</option>
+                            
+      
+                          </Select>
+                        </div>
+                      </div>
+                    
+                      <div class="col-md-1">
+                        <div class="form-group">
+                        </br>
+                          <Button type="submit"  value="Filter"class="btn btn-primary"> <i class="fa fa-filter" aria-hidden="true"></i>Filter</Button>
+                      
+                    </div>
+                  </div>
+                    </div>
+                    </form>
+                            <!-- <option value="{%if p.is_user_verified %}Verified{%else%}Not Verified{%endif%}"> {%if pre.is_user_verified %}Verified{% else %}Not Verified{%endif%}</option> -->
+                          
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'pyfuser_edit' id=0 %}" class="m-0 font-weight-bold text-primary"></a></h6> 
+                      
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            
+                                            <th>User Name</th>
+                                            <th>Full Name</th>
+                                            <th>Email Id</th>
+                                            <th>Mobile No.</th>
+                                            <th>User Status</th>
+                                            <th>Created Date/Time</th>
+                                            <th>Actions</th>
+                                            
+                                            <th style="display: none;">user_id</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in pre %}
+                                        <tr>
+                                            <td>{{ pre.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.name}}</td>
+                                            <td>{{p.full_name}}</td>
+                                            <td>
+                                              <!-- {%if p.is_user_verified %}<input type="button" value="Verified">{% else %}<input type="button" value="Not Verified">{%endif%} -->
+                                            
+                                              <a href="#contactModal" data-toggle="modal" data-target="#myModal_{{p.id}}">{%if p.is_user_verified %}<input type="button" name="is_user_verified" class="btn btn-success" name="is_user_verified" value="Verified"  >{% else %}<input type="button" class="btn btn btn-danger" name="is_user_verified"  value="Not Verified">{%endif%} </a>
+                                                
+                                              <div class="container">
+                                                <!-- <h2>Modal Example</h2> -->
+                                                <!-- Trigger the modal with a button -->
+                                                <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> -->
+                                              
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="myModal_{{p.id}}" role="dialog">
+                                                  <div class="modal-dialog">
+                                                  
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"><strong>User Email Information</strong>   &times;</button>
+                                                        <h4 class="modal-title"></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        
+                                                        {%if p.is_user_verified %}
+                                                        <strong>User Email:</strong> {{p.email}}
+
+                                                        {%else%}
+                                                        {% include 'core/home2.html' %}
+                                                        <!-- <strong>User Email:</strong> 
+                                                        <form method="POST" >
+                                                          {% csrf_token %}
+                                                        {{p.email}}
+                                                        
+                                                      </br></br>
+                                                        <strong>Send Verification Email:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input  type="submit" value="submit" class="btn btn-primary"> -->
+                                                       {%endif%}
+                                                      </form>
+                                                       </div>
+                                                      </div>
+                                                    
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                      </div>
+                                                    </div>
+                                                    
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td>
+                                              <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                                              <p style="position:relative;">{{p.mobile_no}}</p></td>
+
+                                            <td>{% if p.user_status == 0 %}<i class="fa fa-unlock fa-lg" style="color:green">&nbsp;Activated</i>{%else%}<i class="fa fa-lock fa-lg" style="color:red">&nbsp;Blocked</i>{%endif%}</td>
+                                            <td>{{p.created_at}}</td>
+                                            <td>
+
+                                              {% if p.user_status == 0 %}
+                                              
+                                              <a class="view" href="{% url 'pyfuser_edit' p.id %}" >&nbsp;<i class="fa fa-eye fa-lg"></i><a herf="#" id="ownInput1" value="Are you sure want to Blocked this User" class="status_change_button"  onclick="statusChange($(this))"></i>&nbsp;&nbsp;<i class="fa fa-ban"></i>&nbsp;&nbsp;Blocked</a>
+                                              {%elif p.user_status == 1 %}
+                                              
+                                              <a href="{% url 'pyfuser_edit' p.id %}">&nbsp;<i class="fa fa-eye fa-lg"></i><a herf="#" id="ownInput2" value="Are you sure want to Activate this User" class="status_change_button" onclick="statusChange($(this))">&nbsp;&nbsp;<i class="fa fa-unlock fa-lg" ></i>&nbsp;&nbsp;Activate</a>
+                                            {%endif%}
+                                            </td>
+                                            
+                                            <td style="display: none;" value="{{p.id}}">{{p.id}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if pre.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if pre.has_previous %}
+                              <li><a href="?page={{ pre.previous_page_number }}&searchname={{st}}&searchh={{gt}}&username={{rt}}&searchend={{mt}}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in pre.paginator.page_range %}
+                              {% if pre.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}&searchname={{st}}&searchh={{gt}}&username={{rt}}&searchend={{mt}}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if pre.has_next %}
+                              <li><a href="?page={{ pre.next_page_number }}&searchname={{st}}&searchh={{gt}}&username={{rt}}&searchend={{mt}}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+                
+              
+         
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+
+
+
+
+
+ function statusChange(event) {
+  console.log(event)
+  var element =event[0].attributes.value.value
+  alert(element)
+
+  
+    var a=$("#ownInput1").val();
+  //alert(a)
+    console.log('event', event);
+    thisObj = event;
+    trObj = thisObj.closest('tr');
+    userId = trObj.find('td:last').text();
+    // alert(userId)
+    const body = {}
+    body['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val();
+    body['userId'] = userId
+    
+    
+    console.log('body', body);
+    $.ajax({
+      method: "POST",
+      url: '../statusChangeUser',
+      data: body,
+      }).done( function(response){
+          console.log('success');
+          location.reload();
+      }).fail( function(response){
+          console.log('failed');
+      }); 
+ }
+
+
+
+</script>
+<script>
+var mask = '<span style="position:absolute; top:0; left:0; background-color:white;">* ** * **</span>';
+
+$("p").append(mask);
+  </script>
+
+{% endblock javascripts %}

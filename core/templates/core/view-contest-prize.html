@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+                    <h1 class="h3 mb-2 text-gray-800">Contests Prize Type List</h1>
+                  
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'create-contest-prize' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Contest Prize Type</a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Prize Name</th>
+                                            <th>Created Date/Time</th>
+                                            
+                                            <th>Edit</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for p in prizedata %}
+                                        <tr>
+                                            <td>{{ prizedata.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.price_name}}</td>
+                                            <td>{{p.updated}}</td> 
+                                            <td><a href="{% url 'create-contest-prize' p.id %}" onclick="MyMessage()" id="one" class="btn btn-sm btn-primary badge-pill"><i class="fas fa-pencil-alt" style="color:aliceblue"></i></td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if prizedata.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if prizedata.has_previous %}
+                              <li><a href="?page={{ prizedata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in prizedata.paginator.page_range %}
+                              {% if prizedata.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if prizedata.has_next %}
+                              <li><a href="?page={{ prizedata.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+                
+              
+         
+{% endblock content %}
+
+
+{% block javascripts %}
+<script>
+  function MyMessage() {
+        var input2 = document.getElementById('one');
+        alert("Are you sure want to edit Contest Prize Type!")
+        }
+  </script>
+
+{%endblock javascripts%}

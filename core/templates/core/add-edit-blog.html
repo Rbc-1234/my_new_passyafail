@@ -1,0 +1,158 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Add/Edit Blog</h1>
+                    </div>  
+
+
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <form class="user" method="POST" name="myForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                            Title  
+                                            <input type="Text" class="form-control" name="title"  placeholder="Enter blog title" value="{% if blogdata.title %} {{blogdata.title}} {% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Upload Blog Image
+                                            
+                                            <img src="{% if blogdata.image %}{{blogdata.image.url}}{%endif%}" height="50" width="50"></img>
+                                           
+                                            <input type="file" name="image"
+                                                id="exampleInputEmail" value="{% if blogdata.image %} {{blogdata.image}} {% endif %}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            Image Alt
+                                            <input type="text" name="titleSlag"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter blog image alt"  value="{% if blogdata.titleSlag %} {{blogdata.titleSlag}} {% endif %}">
+                                               
+                                        </div>
+                                        <div class="form-group">
+                                            Meta Title
+                                            <input type="text" name="meta_title" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter blog meta title" value="{% if blogdata.meta_title %} {{blogdata.meta_title}} {% endif %}">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            Meta Description
+                                            <textarea rows="4" cols="4" name="meta_desc" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="" value="{% if blogdata.meta_desc %} {{blogdata.meta_desc}} {% endif %}">{% if blogdata.meta_desc %} {{blogdata.meta_desc}} {% endif %}</textarea>
+                                            </div>
+                                        <div class="form-group">
+                                            Status
+                                            <select  name="status"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Address" value="">
+                                                <option value="" >Select</option>
+                                               <option value="0" {% if blogdata.status == 0 %} selected="selected" {% endif %}>Activate</option>
+                                               <option value="1" {% if blogdata.status == 1 %} selected="selected" {% endif %}>Block</option>
+                                            <!-- <option value="{{blogdata.id}}" {% if blogdata.status.id != blogdata.id %} selected=="selected" {%endif%}>Not Verified</option> -->
+                                          
+                                        </select>
+                                        </div>
+                                        <div class="form-group">
+                                            Detail Description
+                                            <textarea  class="form-control" id="editor1" aria-describedby="emailHelp"  name="description"  rows="4" cols="50">{% if blogdata.description %} {{blogdata.description}} {% endif %}</textarea>
+                                
+                                        </div>
+                                        <input type="submit" value="Save" class="btn btn-primary btn-block">
+                                      
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+
+
+<script language="javascript" type="text/javascript"></script> 
+
+ <script>
+  function validateForm() { 
+   
+    let a = document.forms["myForm"]["title"].value;
+    let b = document.forms["myForm"]["titleSlag"].value;
+    let c = document.forms["myForm"]["meta_title"].value;
+    let d = document.forms["myForm"]["meta_desc"].value;
+    
+      
+    if (a == "") {
+      alert("Title value is required.");
+      return false;
+    }
+    if (b == "") {
+      alert("Image Alt value is required.");
+      return false;
+    }
+    if (c == "") {
+        alert("Meta Title  value is required.");
+        return false;
+    }
+    if (d == "") {
+      alert("Meta Description  value is required.");
+      return false;
+    }
+   
+    
+  }
+
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard-all/ckeditor.js"></script>
+  <script>
+      
+CKEDITOR.replace( 'editor1', {
+            fullPage: true,
+            extraPlugins: 'docprops',
+            allowedContent: true,
+            height: 250
+        } );
+      </script>
+{% endblock javascripts %}
+
+
+
+

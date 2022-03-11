@@ -1,0 +1,265 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Add/Edit New Sponsor Way to Success</h1>
+                    </div>  
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                  {% if sponsorform.errors %}
+                                  {% for field in sponsorform %}
+                                      {% for sponsorform in field.errors %}
+                                          <div class="alert alert-danger">
+                                              <strong>{{ sponsorform|escape }}</strong>
+                                          </div>
+                                      {% endfor %}
+                                  {% endfor %}
+                                  {% endif %}
+                                    <form class="user" method="POST" name="myForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+                                        {%csrf_token%}
+                                        <div class="row">
+                                          <div class="col-md-6">
+                                        <div class="form-group">
+                                            Online Presense  
+                                            <input type="checkbox" name="online_presense" value="online_presense" {% if sponsordata.online_presense %} checked {% endif %}
+                                                id="exampleInputEmail">
+                                        </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        <div class="form-group">
+                                            Offline Presense  
+                                            <input type="checkbox" name="offline_presense"
+                                                id="exampleInputEmail" value="offline_presense" {% if sponsordata.offline_presense %} checked {% endif %}>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        <div class="form-group">
+                                            Brand Name
+                                            <input type="text" name="brand_name"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Brand Name"  value="{% if sponsordata.brand_name %}{{sponsordata.brand_name}}{% endif %}">
+                                               
+                                        </div>
+                                        <div class="form-group">
+                                            Company Name
+                                            <input type="text" name="company_name" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Company Name" value="{% if sponsorform.company_name %}{{sponsordata.company_name}}{% endif %}">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            Website URL
+                                            <input type="text" name="web_url" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Website URL" value="{% if sponsordata.web_url %}{{sponsordata.web_url}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Address
+                                            <input type="text" name="address"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Enter Address" value="{% if sponsordata.address %}{{sponsordata.address}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            State
+                                            <input type="text" name="state"class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter State" value="{% if sponsordata.state %}{{sponsordata.state}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Country
+                                            <select type="text" name="country"class="form-control"
+                                            id="exampleInputEmail" 
+                                            placeholder="Enter Country" value="india">
+                                            <option value="">Select Country</option>
+                                            <option value="India" {% if sponsordata.country %} selected="selected" {% endif %}>India</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            Company Phone Number
+                                            <input type="number" name="company_phone"class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter Company Phone Number" value="{% if sponsordata.company_phone %}{{sponsordata.company_phone}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Company GST/VAT Number
+                                            <input type="text" name="company_gst"class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter Company GST/VAT value" value="{% if sponsordata.company_gst %}{{sponsordata.company_gst}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Upload Logo
+                                            {% if sponsordata.company_logo %}
+                                            <img src="{%  static sponsordata.company_logo.url %}" height="50" width="50" id="logoone"></img>
+                                            {% endif %}
+                                            <input type="file" name="company_logo" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp" id="exampleInputPassword"
+                                            placeholder="" value="{% if sponsordata.company_logo %}{{sponsordata.company_logo}}{% endif %}">
+                                        </div>
+                                        <h1>Contact Person</h1>
+                                        <div class="form-group">
+                                            Full Name
+                                            <input type="text" name="person_name" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter Full Name" value="{% if sponsordata.person_name %}{{sponsordata.person_name}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Designation
+                                            <input type="text" name="person_designation" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter Designation" value="{% if sponsordata.person_designation %}{{sponsordata.person_designation}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Mobile Number
+                                            <input type="number" name="person_mobile" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter Designation" value="{% if sponsordata.person_mobile %}{{sponsordata.person_mobile}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Email
+                                            <input type="email" name="person_mail" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="Enter Designation" value="{% if sponsordata.person_mail %}{{sponsordata.person_mail}}{% endif %}">
+                                        </div>
+                                        <!-- <div class="form-group">
+                                          Status
+                                          <input type="radio"   name="status" value="Active" checked {% if sponsordata.status == 'Active' %} checked {% endif %}/>Active
+                                            <input type="radio"  name="status" value="Inactive" {% if sponsordata.status == 'Inactive' %} checked {% endif %}/> Inactive
+                                      </div> -->
+                                       
+                                        <input type="submit" value="Save" class="btn btn-primary btn-block">
+                                      
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+
+
+<script language="javascript" type="text/javascript"></script>
+
+ <script>
+  function validateForm() { 
+   
+    let a = document.forms["myForm"]["brand_name"].value;
+    let b = document.forms["myForm"]["company_name"].value;
+    let c = document.forms["myForm"]["web_url"].value;
+    let d = document.forms["myForm"]["address"].value;
+    let e = document.forms["myForm"]["state"].value;
+    let f = document.forms["myForm"]["country"].value;
+    let g = document.forms["myForm"]["company_phone"].value;
+    let h = document.forms["myForm"]["company_gst"].value;
+    let i = document.forms["myForm"]["company_logo"].value;
+    let j = document.forms["myForm"]["person_name"].value;
+    let k = document.forms["myForm"]["person_designation"].value;
+    let l = document.forms["myForm"]["person_mobile"].value;
+    let m = document.forms["myForm"]["person_mail"].value;
+      
+    if (a == "") {
+      alert("The brand name field is required.");
+      return false;
+    }
+    if (b == "") {
+      alert("The company name field is required.");
+      return false;
+    }
+    if (c == "") {
+        alert("The website url field is required.");
+        return false;
+    }
+    if (d == "") {
+      alert("The address field is required.");
+      return false;
+    }
+    if (e == "") {
+      alert("The state field is required.");
+      return false;
+    }
+    if (f == "") {
+      alert("The country field is required.");
+      return false;
+    }
+    if (g == "") {
+      alert("The company phone number field is required.");
+      return false;
+    }
+    
+    if (h == "") {
+      alert("The company gst/ vat number field is required.");
+      return false;
+    }
+    if (i == "" && document.getElementById("logoone") == null) {
+      alert("The logo field is required.");
+      return false;
+    }
+    if (j == "") {
+      alert("The full name field is required.");
+      return false;
+    }
+    if (k == "") {
+      alert("The designation field is required.");
+      return false;
+    }
+    if (l == "") {
+      alert("The mobile number field is required.");
+      return false;
+    }
+    if (l.length < 10 || l.length > 10) {
+    alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+    return false;
+  }
+    if (m == "") {
+      alert("The email field is required.");
+      return false;
+    }
+    
+  }
+
+</script>
+  
+{% endblock javascripts %}
+
+
+
+

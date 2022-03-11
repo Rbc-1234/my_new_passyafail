@@ -1,0 +1,472 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Create Contests</h1>
+                    </div>  
+
+                    <!-- Content Row -->
+                    <form class="user" enctype="multipart/form-data" method="POST" name="myForm" onsubmit="return validateForm()">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                            <h5><strong>Create Contest</strong></h5></br>
+                                            <strong>Select Category</strong>
+                                            <select name="category" class="form-control">
+                                                <option value="">Select Category</option>
+                                                {% for p in concat %}
+                                                <option value="{{p.id}}"{% if data.category.id == p.id %} selected="selected"{% endif %}>{{p.name}}</option>
+                                                {%endfor%}
+                                                </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <strong>Title</strong>
+                                            <input type="text" name="contest_title" class="form-control"id="exampleInputEmail" aria-describedby="emailHelp"placeholder="Put your title..."value="{% if data.contest_title %}{{data.contest_title}}{% endif %}{% if crvk.contest_title %}{{crvk.contest_title}}{%endif%}">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            <strong> Question</strong>
+                                            <input type="text" class="form-control" name="question" id="exampleInputEmail" aria-describedby="emailHelp"placeholder="Put your question..." value="{% if data.question %}{{data.question}}{% endif %}" value="{% if data.question %}{{data.question}}{% endif %}">
+                                     
+                                        </div>
+                                        <div class="form-group">
+                                           <strong> Venue</strong>
+                                            <input type="text" name="contest_venue"class="form-control"id="exampleInputEmail" aria-describedby="emailHelp"placeholder="Put your venue..." value="{% if data.contest_venue %}{{data.contest_venue}}{% endif %}">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <strong> Sheduled Date</strong>
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control" name="contest_schedule_date" value="{{formm.contest_schedule_date.value | date:'c'}}">
+                                                        <div class="input-group-append">
+                                                          <span class="input-group-text" id="basic-addon2">
+                                                            <i class="fas fa-calendar-alt"></i>
+                                                          </span>
+                                                        </div>
+                                                      </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <strong>Sheduled Time</strong>
+                                                    <div class="input-group">
+                                                    <input type="time" class="form-control" name="contest_schedule_time" value="{{formm.contest_schedule_time.value | date:'c'}}">
+                                                        <div class="input-group-append">
+                                                        <span class="input-group-text" id="basic-addon2">
+                                                          <i class="fas fa-clock"></i>
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                        <div class="form-group">
+                                            <strong>Upload Contest Creative</strong></br>
+                                            <strong>
+                                            <input type="radio" name="uploadContest" {% if data.uploadContest == 'image' %} checked  {% endif %} class="rbdonation" value="image" id="yesCheck" onclick="javascript:yesnoCheck();" /> Image
+                                            <input type="radio" name="uploadContest" {% if data.uploadContest == 'video' %} checked  {% endif %} class="rbdonation" value="video" id="noCheck" onclick="javascript:yesnoCheck();"/> Video
+                                            </strong>
+                                        </div>
+                                            
+                                            <div class="form-group" id="ifYes" style="display:none">
+                                                <strong>Upload Contest Image</strong>
+                                                {% if data.contest_image %}
+                                                <img src="{% static data.contest_image.url %}" height="50" width="50"></img></br>
+                                                {%else%}
+                                                <img src="{% static data.contest_image %}"></img></br>
+                                                <h3>No image to display</h3>
+                                                {% endif %}
+                                            <input type='file' id='myimage'  multiple name='contest_image'>
+                                            </div>   
+                                            
+                                            <div class="form-group" id="ifno" style="display:none">
+                                            <strong>Upload Thumbnail</strong>
+                                            {% if data.contest_thumbnail %}
+                                            <img src="{% static data.contest_thumbnail.url %}" height="50" width="50"></img></br>
+                                            {%else%}
+                                            <img src="{% static data.contest_thumbnail %}"></img></br>
+                                            <h3>No image to display</h3>
+                                            {% endif %}
+                                            
+                                            <input type='file' id='myvideo' multiple  name='contest_thumbnail' value="{% if data.contest_thumbnail %}{{data.contest_thumbnail}}{% endif %}"></br>
+                                            
+                                            <strong> Video URL/ID</strong>
+                                            <input type="text" class="form-control" name="video_ad_url" id="myurl"  placeholder="" value="{% if data.video_ad_url %}{{data.video_ad_url}}{% endif %}">
+                                            Put here the video id : http://www.youtube.com/watch?v=sdUUx5FdySs EX:'sdUUx5FdySs'.
+                                            </div> 
+                                            
+                                            <div class="form-group">
+                                                <strong> Prize Description</strong>
+                                                <textarea  class="form-control" id="editor1" aria-describedby="emailHelp"  name="prize_description"  rows="4" cols="50">{% if data.prize_description %}{{data.prize_description}}{% endif %}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <strong> Contest Description</strong>
+                                                <textarea  class="form-control" id="editor2" aria-describedby="emailHelp"  name="description"  rows="4" cols="50">{% if data.description %}{{data.description}}{% endif %}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <strong>Terms and Conditions</strong>
+                                                <textarea  class="form-control" id="editor3"   name="contest_term_conditions"  rows="4" cols="50">{% if data.contest_term_conditions %}{{data.contest_term_conditions}}{% endif %}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <strong> No. Of Winner To be Announced</strong>
+                                                <input type="number"  name="no_winner" id="myinput3" placeholder="Number of winners" class="form-control" value="{% if data.no_winner %}{{data.no_winner}}{% endif %}">
+                                            </div>
+                                            <div class="form-group">
+                                                <strong>Type of Prize</strong>
+                                                <Select type="number"  name="type_price" id="" placeholder="Select Prize Type" class="form-control">
+                                                    <option value="">Select Prize Type</option>
+                                                    {% for a in conpriz %}
+                                            <option value="{{a.id}}" {% if data.type_price.id == a.id %} selected=="selected" {%endif%}>{{a.price_name}}</option>
+                                                {% endfor %}
+                                                </Select>
+                                            </div>
+                                            <div class="form-group">
+                                                <strong>Upload Prize Image</strong>
+                                                {% if data.contest_image_thumb %}
+                                                <img src="{% static data.contest_image_thumb.url %}"height="50" id="img11" width="50" ></img></br>
+                                                {% endif %}
+                                                <input type="file"  name="contest_image_thumb" value="{%if data.contest_image_thumb %}{{data.contest_image_thumb.url}}{% endif %}" id="exampleInputPassword" ></br>Size of the 250 x 250 pixels
+                                            </div>
+                                            <div class="form-group">
+                                                <strong> Amount (Rs.)</strong>
+                                                <input type="number" id="myInput1" name="total_amount" class="form-control" placeholder="Total Amount" value="{% if data.total_amount %}{{data.total_amount}}{% endif %}" onchange="myChangeFunction(this)">
+                                            </div>
+                                            <div class="form-group">  
+                                                <strong>                                          
+                                                <input type="radio" name="amount_change" value="sametoall" onclick="javascript:yesnoCheck();"  />Same to All
+                                                <input type="radio" name="amount_change" value="equalldivide" id="positionone"onclick="javascript:yesnoCheck();" /> Equally Divided
+                                                <input type="radio" name="amount_change" value="positionwise" id="position" onclick="javascript:yesnoCheck();"/> Position Wise
+                                                
+                                                </strong>
+                                            </div>
+                                            <div id="positionwise" style="display:none">
+                                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                                                
+                                                <input type="button" onclick="restAmount()" id="butt_add"value="Add More Position"/>
+                                                <input type="button" onclick="remove()" value="Remove More Positions"/></br>
+                                                <input type='checkbox' id="chk1" name='restAmout' onclick="restAmount()"> Equal divide Rest amount</br>
+
+                                                <span id="p_1"> First Position</span>
+                                                <input type="text" id='new_1' name="reamt" value="" class="form-control">
+                                                <div id="new_chq">
+                                                <input type="hidden" value="2" id="total_chq">
+                                                </div>
+                                                </div> 
+
+                                             
+                                            
+                                            <div id="positiononewise" style="display:none">
+                                                Every one will get Amount (Rs.)
+                                                <input type="number" id="myInput2" name="eqamount" value="{% if data.eqamount %}{{data.eqamount}}{%endif%}"class="form-control" >
+                                            </div>
+                                            <div class="form-group">
+                                               <strong> Contest Win Title</strong>
+                                                <input type="text"  name="contestWinTitle" id="" placeholder="Put Contest Win Title" class="form-control"value="{% if data.contestWinTitle %}{{data.contestWinTitle}}{% endif %}">
+                                            </div>
+                                            <div class="form-group">
+                                               <strong> Contest Win Amount Title</strong>
+                                                <input type="text"  name="contestWinAmountTitle" id="" placeholder="Put Contest Win Amount Title" class="form-control" value="{% if data.contestWinAmountTitle %}{{data.contestWinAmountTitle}}{% endif %}">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                       <strong> Contest Start Date</strong>
+                                                        <div class="input-group">
+                                                            <input type="date" class="form-control" name="contest_start_date"value="{{formm.contest_start_date.value | date:'c'}}" onchange="mydateChangeFunction(this)">
+                                                            <div class="input-group-append">
+                                                              <span class="input-group-text" id="basic-addon2">
+                                                                <i class="fas fa-calendar-alt"></i>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                       <strong> Contest Start Time</strong>
+                                                        <div class="input-group">
+                                                        <input type="time" class="form-control" name="contest_start_time" value="{{formm.contest_start_time.value | date:'c'}}">
+                                                            <div class="input-group-append">
+                                                            <span class="input-group-text" id="basic-addon2">
+                                                              <i class="fas fa-clock"></i>
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                   
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <strong>Contest End Date</strong>
+                                                        <div class="input-group">
+                                                            <input type="date" class="form-control" id="conendate"name="contest_end_date" value="{{formm.contest_end_date.value | date:'c'}}">
+                                                            <div class="input-group-append">
+                                                              <span class="input-group-text" id="basic-addon2">
+                                                                <i class="fas fa-calendar-alt"></i>
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <strong>Contest End Time</strong>
+                                                        <div class="input-group">
+                                                        <input type="time" class="form-control" name="contest_end_time" value="{{formm.contest_end_time.value | date:'c'}}">
+                                                            <div class="input-group-append">
+                                                            <span class="input-group-text" id="basic-addon2">
+                                                              <i class="fas fa-clock"></i>
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                            <div class="form-group">
+                                                <input type="checkbox" value="inactive"   id="participant" onclick="javascript:yesnoCheck();"/>   <strong>  Do you wish to give anything to participants?</strong>
+                                            </div>
+                                            <div id="participantwise" style="display:none">
+                                                <strong>
+                                                <input type="radio" value="active"       />For all participants.  
+                                                <input type="radio" value="inactive"  /> For correct answer participants.
+                                                </strong>
+                                            </br>
+                                            <div class="form-group">
+                                            <strong>Type of Prize</strong>
+                                            <Select type="number"  name="type_price_nd" id="exampleInputPassword" placeholder="Select Prize Type" class="form-control">
+                                            <option value="">Select Prize Type</option>
+                                                {% for a in conpriz%}
+                                            <option value="{{a.id}}" {% if data.type_price_nd.id == a.id %} selected=="selected" {%endif%}>{{a.price_name}}</option>
+                                                {% endfor %}
+                                            </Select>
+                                                </div>
+                                                <div class="form-group"></div>
+                                                <strong>Amounts (Rs.)</strong>
+                                                <input type="number" class="form-control" name="total_amount_nd" id=""  placeholder="Total Amount" value="{% if data.total_amount_nd %}{{data.total_amount_nd}}{% endif %}">
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="checkbox"   id="featured" onclick="javascript:yesnoCheck();"/> <strong>Is Featured</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="checkbox"   id="mobilefeatured" onclick="javascript:yesnoCheck();"/> <strong>Is Mobile Featured</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                    <div class="form-group" id="featurewise" style="display: none;">
+                                                    <strong>Upload Feature Image</strong>
+                                                    {% if data.feature_image %}
+                                                    <img src="{% static data.feature_image.url %}"height="50" width="50"></img></br>
+                                                    {% endif %}
+                                                    <input type="file"  name="feature_image" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Total Amount">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group" id="mobilefeaturewise" style="display: none;">
+                                                       <strong> Upload Mobile Feature Image</strong>
+                                                        {% if data.mobile_feature_img %}
+                                                        <img src="{% static data.mobile_feature_img.url %}"height="50" width="50"></img></br>
+                                                    {% endif %}
+                                                        <input type="file"  name="mobile_feature_img" id=""  placeholder="Total Amount">
+                                                    </div>
+                                                </div>
+                                                </div>  
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6">
+
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="d-grid gap-3">
+                                <div class="card-body">
+                                    <div class="form-group" >
+                                        <h5><strong>Advertising Option</strong></h5></br>
+                                        <strong>Select Contest Sponsor</strong>
+                                        <select type="text"  name="sponsor_id"
+                                            id="exampleInputPassword" placeholder="Password" class="form-control">
+                                            <option value="">Select Contest Sponcer</option>
+                                            {% for a in spon%}
+                                            <option value="{{a.id}}"{% if data.sponsor_id.id == a.id %}selected="selected"{%endif%}>{{a.brand_name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                    <h3><strong>Video Ad on Contest</strong></h3></br>  
+                                    <strong>
+                                        <input type="radio" name="vac"  value="default" checked class="rbdonation"onclick="javascript:yesnoCheck();"/> Default
+                                        <input type="radio" name="vac" {% if data.vac == 'other' %} checked {% endif %} value="other" class="rbdonation" id="other" onclick="javascript:yesnoCheck();"/> Other
+                                        <input type="radio" name="vac" {% if data.vac == 'novideo' %} checked {% endif %} value="novideo" class="rbdonation" onclick="javascript:yesnoCheck();"/> No Video
+                                    </strong>
+                                    </div>
+                                    <div class="form-group" id="otherwise" style="display:none">
+                                        Video Type
+                                        <select  class="form-control" name="video_ad_type" id=""  value="{% if data.video_ad_type %}{{data.video_ad_type}}{% endif %}">
+                                        <option value="Select-one">Select-one</option>
+                                        <option value="Youtube">Youtube</option>
+                                        <option value="Youtube">other video</option>
+                                    </select>
+                                </br>
+                                    Video URL/ID
+                                    <input type="text" class="form-control" name="video_ad_company" id=""  value="{% if data.video_ad_company %}{{data.video_ad_company}}{% endif %}">
+                                    Put here the video id : http://www.youtube.com/watch?v=sdUUx5FdySs EX:'sdUUx5FdySs'.
+                                </br></br>
+                                    Video Time
+                                    <input type="time" class="form-control" name="video_ad_time" id="" placeholder="Fill Video time in second" value="{{formm.video_ad_time.value | date:'c'}}">
+                                </br>
+                                    Video Skip Time
+                                    <input type="time" class="form-control" name="video_ad_skip_time" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Fill Video skip time in seconds" value="{{formm.video_ad_skip_time.value | date:'c'}}">
+                                    </div>
+                                    <div class="form-group">
+                                    <h3><strong>Advertising after header</strong></h3></br>
+                                    <strong>
+                                    <input type="radio"  name="dgc" value="defa" checked onclick="javascript:yesnoCheck();"/> Default
+                                    <input type="radio" name="dgc" {% if data.dgc == 'gco' %} checked {% endif %}value="gco"   id="gcode" onclick="javascript:yesnoCheck();"/> Google Code
+                                    <input type="radio"  name="dgc" {% if data.dgc == 'cusi' %} checked {% endif %}value="cusi" id="cumg" onclick="javascript:yesnoCheck();"/> Custom Image
+                                    </strong>
+                                    </div>
+                                    <div class="form-group" id="gcodewise" style="display:none">
+                                    Advertising Code html (Ex: Google ads)
+                                    <textarea  rows="4" cols="50" class="form-control" name="google_ad_after_header"id="myadver">{% if data.google_ad_after_header %}{{data.google_ad_after_header}}{% endif %}</textarea>
+                                    </div>
+                                    <div class="form-group" id="cumgwise" style="display:none">
+                                    Upload Image
+                                    {% if data.ad_after_header_image %}
+                                    <img src="{% static data.ad_after_header_image.url %}"height="50" width="50"></img></br>
+                                    {% endif %}
+                                    <input type="file"  name="ad_after_header_image"id="myadvimage"></br>Size should be 624 x 80 px.
+                                    </br>Image URL
+                                    <input type="text"  class="form-control"name="ad_after_header_url"id="myadvurl"  placeholder="Put img url" value="{% if data.ad_after_header_url %}{{data.ad_after_header_url}}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                    <h3><strong>Advertising #1 on Sidebar</strong></h3></br>
+                                    <strong>
+                                    <input type="radio"   name="ptg" value="tdf" checked     onclick="javascript:yesnoCheck();"/> Default
+                                    <input type="radio"   name="ptg" {% if data.ptg == 'deop' %} checked {% endif %} value="deop" id="ggcode" onclick="javascript:yesnoCheck();"/> Google Code
+                                    <input type="radio"   name="ptg" {% if data.ptg == 'cusi' %} checked {% endif %} value="cusi" id="ccumg" onclick="javascript:yesnoCheck();"/> Custom Image
+                                    </strong>
+                                    </div>
+                                    <div class="form-group" id="ggcodewise" style="display:none">
+                                    Advertising Code html (Ex: Google ads)
+                                    <textarea  rows="4" cols="50" class="form-control" name="google_ad_1_sidebar" id="exampleInputEmail" aria-describedby="emailHelp" >{% if data.google_ad_1_sidebar %}{{data.google_ad_1_sidebar}}{% endif %}</textarea>
+                                    
+                                    </div>
+                                    <div class="form-group" id="ccumgwise" style="display:none">
+                                    Upload Image
+                                    {% if data.ad_1_side_image %}
+                                    <img src="{% static data.ad_1_side_image.url %}"height="50" width="50"></img></br>
+                                    {% endif %}
+                                    <input type="file"  name="ad_1_side_image"id="myadv1img" aria-describedby="emailHelp"></br>Size should be 624 x 80 px.
+                                    </br>Image URL
+                                    <input type="text"  class="form-control"name="ad_1_side_url" id="myadv1url" placeholder="Put img url" value="{% if data.ad_1_side_url %}{{data.ad_1_side_url}}{% endif %}">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                    <h3><strong>Advertising #2 on Sidebar</strong></h3></br>
+                                    <strong>
+                                    <input type="radio" name="gpk" value="bor" checked onclick="javascript:yesnoCheck();" /> Default
+                                    <input type="radio" name="gpk" {% if data.gpk == 'shr' %} checked {% endif %} value="shr" id="goog" onclick="javascript:yesnoCheck();"/> Google Code
+                                    <input type="radio" name="gpk"  {% if data.gpk == 'pht' %} checked {% endif %} value="pht" id="cust" onclick="javascript:yesnoCheck();"/> Custom Image
+                                    </strong>
+                                    </div>
+                                    <div class="form-group" id="googwise" style="display:none">
+                                    Advertising Code html (Ex: Google ads)
+                                    <textarea  rows="4" cols="50" class="form-control" name="google_ad_2_sidebar"id="myadv2text" >{% if data.google_ad_2_sidebar %}{{data.google_ad_2_sidebar}}{% endif %}</textarea>
+                                    
+                                    </div>
+                                    <div class="form-group" id="custwise" style="display:none">
+                                    Upload Image
+                                    {% if data.ad_2_side_image %}
+                                    <img src="{% static data.ad_2_side_image.url %}"height="50" width="50"></img></br>
+                                    {% endif %}
+                                    <input type="file" multiple name="ad_2_side_image"id="myadv2img" ></br>Size should be 624 x 80 px.
+                                    </br>Image URL
+                                    <input type="text"  class="form-control"name="ad_2_side_url"id="myadv2url" placeholder="Put img url" value="{% if data.ad_2_side_url %}{{data.ad_2_side_url}}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                    <h3><strong>Status</strong></h3></br>
+                                    <strong>
+                                    <input type="radio"   name="status" value="Published" checked {% if data.status == 'Not Published' %} checked {% endif %}/>Published
+                                    <input type="radio"  name="status" value="Not Published" {% if data.status == 'Published' %} checked {% endif %}/>Not Published
+                                    </strong>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <input type="submit" value="submit" class="btn btn-primary btn-block">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    </form>
+                </div>
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+
+    <!-- Bootstrap core JavaScript-->
+    
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://cdn.ckeditor.com/4.17.1/standard-all/ckeditor.js"></script>
+
+<script language="javascript" type="text/javascript"></script>
+
+<script src="{% static 'assets/js/create-contest.js' %}"></script>
+  
+{% endblock javascripts %}
+
+
+
+

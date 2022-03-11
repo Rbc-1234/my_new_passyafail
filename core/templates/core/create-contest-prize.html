@@ -1,0 +1,94 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Add/Edit Contest Prize Type</h1>
+                    </div>  
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <form class="user" method="POST" name="myForm" onsubmit="return validateForm()">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                            Prize Name  
+                                            <input type="text" name="price_name" class="form-control" placeholder="Enter Prize Name" value="{% if pre.price_name %} {{pre.price_name}} {% endif %}"
+                                                id="exampleInputEmail">
+                                        </div>
+                                        <!-- <div class="form-group">
+                                            Status
+                                            <input type="radio"   name="status" value="Active" checked {% if pre.status == 'Active' %} checked {% endif %}/>Active
+                                            <input type="radio"  name="status" value="Inactive" {% if pre.status == 'Inactive' %} checked {% endif %}/> Inactive
+                                        </div> -->
+                                
+                                        <input type="submit" value="Create" class="btn btn-primary btn-block">
+                                      
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+
+
+<script language="javascript" type="text/javascript"></script>
+
+ <script>
+  function validateForm() { 
+   
+    let a = document.forms["myForm"]["price_name"].value;
+
+      
+    if (a == "") {
+      alert("The price name field is required.");
+      return false;
+    }
+      
+    }
+
+</script>
+  
+{% endblock javascripts %}
+
+
+
+

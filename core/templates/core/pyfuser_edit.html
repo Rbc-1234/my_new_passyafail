@@ -1,0 +1,227 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">View User Detail</h1>
+                    </div>  
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <!-- Approach -->
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
+                                    <form class="user" method="POST" name="myForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                          
+                                          Profile Pic
+                                         
+                                         <img src="{% if xpdata.profile_pic%}{{xpdata.profile_pic.url}}{%endif%}">{{xpdata.profile_pic}}</img>
+                                             
+                                      </div>
+                                        <div class="form-group">
+                                          
+                                            User Name
+                                           
+                                            <input type="text" name="name"class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="User Name"  value="{% if xpdata.name %}{{xpdata.name}}{% endif %}">
+                                               
+                                        </div>
+                                        <div class="form-group">
+                                            Full Name
+                                            <input type="text" name="full_name" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="User Full Name" value="{% if xpdata.full_name %}{{xpdata.full_name}}{% endif %}">
+                                                
+                                        </div>
+                                        <div class="form-group">
+                                            Email Id
+                                            <input type="email" name="email" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Email" value="{% if xpdata.email %}{{xpdata.email}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            Mobile No.
+                                            <input type="number" name="mobile_no" class="form-control"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="" value="{% if xpdata.mobile_no %}{{xpdata.mobile_no}}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                          DOB
+                                          <input type="date" name="dob" class="form-control"
+                                              id="exampleInputEmail" aria-describedby="emailHelp"
+                                              placeholder="" value="{{userform.dob.value | date:'c'}}">
+                                      </div>
+                                      <div class="form-group">
+                                        Gender
+                                        <input type="text" name="gender" class="form-control"
+                                            id="exampleInputEmail" aria-describedby="emailHelp"
+                                            placeholder="" value="{% if xpdata.gender %}{{xpdata.gender}}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                      Address
+                                      <input type="text" name="city" class="form-control"
+                                          id="exampleInputEmail" aria-describedby="emailHelp"
+                                          placeholder="" value="{% if xpdata.city %}{{xpdata.city}}{% endif %}">
+                                  </div>
+                                  <div class="form-group">
+                                    Email Verified
+                                    <tr><td>
+                                      {%if xpdata.is_user_verified %}<i class="fa fa-check fa-lg" style="color:green">Verified</i>{% else %}<i class="fa fa-times fa-lg" style="color:red ">Not Verified</i>{%endif%}
+                                      </td>
+                                      </tr>
+                                </div>
+                                <div class="form-group">
+                                  Status
+                                  <tr><td>
+                                    {% if xpdata.user_status == 0 %}<i class="fa fa-unlock fa-lg" style="color:green">Activated</i>{%else%}<i class="fa fa-lock fa-lg" style="color:red">Blocked</i>{%endif%}
+                                    </td>
+                                    </tr>
+                              </div>
+                                      
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                
+                <!-- /.container-fluid -->
+
+            
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+</body>
+
+</html>
+{% endblock content %}
+
+{% block javascripts %}
+
+
+<script language="javascript" type="text/javascript"></script>
+<!-- <script>
+document.getElementById("curtainInput").addEventListener(
+  "click",
+  function(event) {
+    if (event.target.value === "Blocked") {
+      event.target.value = "Activated";
+    } else {
+      event.target.value = "Blocked";
+    }
+  },
+  false
+);
+</script> -->
+ <!-- <script>
+  function validateForm() { 
+   
+    let a = document.forms["myForm"]["brand_name"].value;
+    let b = document.forms["myForm"]["company_name"].value;
+    let c = document.forms["myForm"]["web_url"].value;
+    let d = document.forms["myForm"]["address"].value;
+    let e = document.forms["myForm"]["state"].value;
+    let f = document.forms["myForm"]["country"].value;
+    let g = document.forms["myForm"]["company_phone"].value;
+    let h = document.forms["myForm"]["company_gst"].value;
+    let i = document.forms["myForm"]["company_logo"].value;
+    let j = document.forms["myForm"]["person_name"].value;
+    let k = document.forms["myForm"]["person_designation"].value;
+    let l = document.forms["myForm"]["person_mobile"].value;
+    let m = document.forms["myForm"]["person_mail"].value;
+      
+    if (a == "") {
+      alert("The brand name field is required.");
+      return false;
+    }
+    if (b == "") {
+      alert("The company name field is required.");
+      return false;
+    }
+    if (c == "") {
+        alert("The website url field is required.");
+        return false;
+    }
+    if (d == "") {
+      alert("The address field is required.");
+      return false;
+    }
+    if (e == "") {
+      alert("The state field is required.");
+      return false;
+    }
+    if (f == "") {
+      alert("The country field is required.");
+      return false;
+    }
+    if (g == "") {
+      alert("The company phone number field is required.");
+      return false;
+    }
+    
+    if (h == "") {
+      alert("The company gst/ vat number field is required.");
+      return false;
+    }
+    if (i == "" && document.getElementById("logoone") == null) {
+      alert("The logo field is required.");
+      return false;
+    }
+    if (j == "") {
+      alert("The full name field is required.");
+      return false;
+    }
+    if (k == "") {
+      alert("The designation field is required.");
+      return false;
+    }
+    if (l == "") {
+      alert("The mobile number field is required.");
+      return false;
+    }
+    if (l.length < 10 || l.length > 10) {
+    alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+    return false;
+  }
+    if (m == "") {
+      alert("The email field is required.");
+      return false;
+    }
+    
+  } -->
+
+
+   
+
+<!-- </script> -->
+  
+{% endblock javascripts %}
+
+
+
+

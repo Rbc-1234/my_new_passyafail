@@ -1,0 +1,142 @@
+{% extends 'core/base.html' %}
+{% block content %}
+{% load static %}
+
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">List of Contests</h1>
+                    <form method="get" >
+                      <div class="row">
+                        <div class="col-md-2">
+                        
+                          <div class="form-group">
+                            Start Date:
+                            <input type="date" name="searchname" class="form-control" value="{{st}}">
+                          </div>
+                          </div>
+                          
+                            <div class="col-md-2">
+                              <div class="form-group">
+                            End Date:
+                            <input type="date" name="searchend" value="{{mt}}" class="form-control">
+                            </div>
+                            </div>
+
+                              <div class="col-md-2">
+                                <div class="form-group">
+                            Sponsor:
+                            <select  name="username"  class="form-control">
+                              <option value="">Select</option>
+                              {% for a in csd %}
+                              <option value="{{a.id}}" {% if a.id == rt %} selected="selected" {% endif %}>{{a.brand_name}}</option>
+                              {% endfor %}
+                              </select>
+                            </div>
+                            </div>
+                            <div class="col-md-2">
+                            <div class="form-group">
+                          Category:
+                          <select  name="newcategory"  class="form-control">
+                            <option value="">Select</option>
+                            {% for c in ccd %}
+                            <option value="{{c.id}}" {% if c.id == gt %} selected="selected" {% endif %}>{{c.name}}</option>
+                            {% endfor %}
+                            </select>
+                          </div>
+                          </div>       
+                        <div class="col-md-1">
+                          <div class="form-group">
+                          </br>
+                            <Button type="submit"  value="Filter"class="btn btn-primary"> <i class="fa fa-filter" aria-hidden="true"></i>Filter</Button>
+                        
+                      </div>
+                    </div>
+                      </div>
+                      </form>
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'create-contest' id=0 %}" class="m-0 font-weight-bold text-primary">Add New Contests</a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                        <th>ID</th>
+                                          <th>Start Date/Time  </th>
+                                          
+                                          <th>Contest,Category & Sponcer</th>
+                                          
+                                          <th> # of Prize & Worth</th>
+                                          
+                                          <th> # of Winners</th>
+                                          <th> # Contest Status</th>
+                                          <th>End Date/Time </th>
+                              
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    User List [Total Users : {{ pre.paginator.count }}]
+                                    <tbody>
+                                        {% for p in pre %}
+                                        <tr>
+                                            <td>{{ pre.start_index|add:forloop.counter0 }}</td>
+                                                  <td>{{p.contest_start_date}}</br>{{p.contest_start_time}}</td>
+                                                  <td>{{p.contest_title}}</br>Category:<strong>{{p.category.name}}</strong>|Posted On:<strong>{{p.contest_start_date}}</strong></br>Sponsor:<strong>{{p.sponsor_id.brand_name}}</strong></td>
+                                                  <td><span class="badge badge-success">{{p.type_price.price_name}} </span></br> <strong>Rs.{{p.total_amount}}</strong></td>
+                                                  <td>{{p.no_winner}}</td>
+                                                  <td width="12%"><button type="button" class="btn btn-danger">{{p.status}}</button></td>
+                                                  <td>{{p.contest_end_date}}</br>{{p.contest_end_time}}  </td>
+                                                  <td hidden>{{p.prize_description|safe}}</td>
+                                            <td width="5%" align="center"><a href="#!"><i class="fas fa-eye"style="color:yellowgreen"></i></a>
+                                              <a href="{% url 'create-contest' p.id %}"><i class="fas fa-pencil-alt" style="color:yellowgreen"></i></a>
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if pre.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if pre.has_previous %}
+                              <li><a href="?page={{ pre.previous_page_number }}&searchname={{st}}&searchend={{mt}}&username={{rt}}&newcategory={{gt}}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in pre.paginator.page_range %}
+                              {% if pre.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}&searchname={{st}}&searchend={{mt}}&username={{rt}}&newcategory={{gt}}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if pre.has_next %}
+                              <li><a href="?page={{ pre.next_page_number }}&searchname={{st}}&searchend={{mt}}&username={{rt}}&newcategory={{gt}}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+               
+{% endblock content %}

@@ -1,0 +1,172 @@
+{% extends 'core/base.html' %}
+{% block content %}
+
+                    <h1 class="h3 mb-2 text-gray-800">Reach Us Enquiries List</h1>
+                    <form method="get" >
+                      <div class="row">
+                        <div class="col-md-2">
+                        
+                          <div class="form-group">
+                            Start Date:
+                            <input type="date" name="searchname" class="form-control" value="{{st}}">
+                          </div>
+                          </div>
+                          
+                            <div class="col-md-2">
+                              <div class="form-group">
+                            End Date:
+                            <input type="date" name="searchend" value="{{mt}}" class="form-control">
+                            </div>
+                            </div>
+
+                              <div class="col-md-2">
+                                <div class="form-group">
+                            User Name:
+                            <input type="Text" name="username" value="{{rt}}" class="form-control">
+                            </div>
+                            </div>      
+                        <div class="col-md-1">
+                          <div class="form-group">
+                          </br>
+                            <Button type="submit"  value="Filter"class="btn btn-primary"> <i class="fa fa-filter" aria-hidden="true"></i>Filter</Button>
+                        
+                      </div>
+                    </div>
+                      </div>
+                      </form>
+                  
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="" class="m-0 font-weight-bold text-primary"></a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email Id</th>
+                                            <th>Mobile No</th>
+                                            <th>Country</th>
+                                           
+                                            <th>Created Date/Time</th>
+                                            <th>Action</th>
+                                            
+                                            
+                                        </tr>
+                                    </thead>
+                
+                                    <tbody>
+                                        {% for p in blogdata %}
+                                        <tr>
+                                            <td>{{ blogdata.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.name}}</td>
+                                            <td>{{p.email}}</td>
+                                            <td>{{p.phone}}</td>
+                                            <td>{{p.country}}</td>
+                                            
+                                            <td>{{p.created}}</td>
+                                            <td><a><a href="#contactModal" data-form="" data-toggle="modal" data-target="#myModal_{{p.id}}"><i class="fa fa-eye fa-lg" style="color:yellowgreen"></i></a>
+                                                <div class="modal fade" id="myModal_{{p.id}}" role="dialog">
+                                                    <div class="modal-dialog">
+                                                    
+                                                      <!-- Modal content-->
+                                                      <div class="modal-content">
+                                                        <div class="modal-header">
+                                                          <button type="button" class="close" data-dismiss="modal"><strong></strong>   &times;</button>
+                                                          <h4 class="modal-title"></h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                          {% include 'core/reachusform.html' %}
+                                                         </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if blogdata.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if blogdata.has_previous %}
+                              <li><a href="?page={{ blogdata.previous_page_number }}&searchname={{st}}&username={{rt}}&searchend={{mt}}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in blogdata.paginator.page_range %}
+                              {% if blogdata.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}&searchname={{st}}&username={{rt}}&searchend={{mt}}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if blogdata.has_next %}
+                              <li><a href="?page={{ blogdata.next_page_number }}&searchname={{st}}&username={{rt}}&searchend={{mt}}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+                
+              
+         
+{% endblock content %}
+{% block javascripts %}
+
+<script>
+//   // function ChangeStatus(id){
+//   //   // alert(id);
+//   //   //
+//   function statusChange(event) {
+//     var a=$("#curtainInput_"+id).val();
+//     alert(a)
+//    console.log('event', event);
+//     thisObj = event;
+//     trObj = thisObj.closest('tr');
+//     userId = trObj.find('td:last').text();
+//     const body = {}
+//     body['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val();
+//     body['userId'] = userId
+//     console.log('body', body);
+//     $.ajax({
+//       method: "POST",
+//       url: '../statusChangeUsers',
+//       data: body,
+//       }).done( function(response){
+//           console.log('success');
+//           location.reload();
+//       }).fail( function(response){
+//           console.log('failed');
+//       });
+//   }
+</script>
+{% endblock javascripts %}

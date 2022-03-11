@@ -1,0 +1,133 @@
+{% extends 'core/base.html' %}
+{% block content %}
+                    <h1 class="h3 mb-2 text-gray-800">Blog List</h1>
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                    {% endif %}
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6><a href="{% url 'add-edit-blog' id=0 %}" class="m-0 font-weight-bold text-primary">Create Blog</a></h6> 
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Blog Title</th>
+                
+                                            <th>Status</th>
+                                            <th>Created Date/Time</th>
+                                            <th>Actions</th>
+                                            
+                                            
+                                        </tr>
+                                    </thead>
+                
+                                    <tbody>
+                                        {% for p in blogdata %}
+                                        <tr>
+                                            <td>{{ blogdata.start_index|add:forloop.counter0 }}</td>
+                                            <td>{{p.title}}</td>
+                                            <td>
+                                            {% if p.status == 0 %}
+                                            {%csrf_token%}
+                                            <a href="#" onclick="statusChange($(this))"  id="ownInput1"  value="Are you sure want to Block this User" class="btn btn-success btn-md"><i class="fa fa-unlock fa-lg"></i>&nbsp;Activate</a>
+                                            {% elif p.status == 1 %}
+                                            <a href="#" onclick="statusChange($(this))"  id="ownInput2" value="Are you sure want to Activate this User" class="btn btn-danger btn-md"><i class="fa fa-ban"></i>&nbsp;Block</a>
+                                            {%csrf_token%}
+                                            {%endif%}  
+                                          </td>
+                                            <td>{{p.created}}</td>
+                                            <td><a href="{% url 'add-edit-blog' p.id %}"><i class="fa fa-edit fa-lg"></i></td>
+                                            <td style="display: none;" value="{{p.id}}">{{p.id}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row justify-content-around mt-1 ">
+                        <div class="col-sm-2" >
+                        <!-- <span>
+                        {% if pre.has_previous %}
+                        <a href="?page={{pre.previous_page_number}}">Previous</a>
+                        {% endif %}
+                        <span> {{pre.number}} </span>
+                        {% if pre.has_next %}
+                        <a href="?page={{pre.next_page_number}}">Next</a>
+                        {% endif %}
+                        </span>  -->
+                        
+                        {% if blogdata.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                          <ul class="pagination">
+                            {% if blogdata.has_previous %}
+                              <li><a href="?page={{ blogdata.previous_page_number }}" class="page-link">&laquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&laquo;</span></li>
+                            {% endif %}
+                            {% for i in blogdata.paginator.page_range %}
+                              {% if blogdata.number == i %}
+                                <li class="active"><span class="page-link">{{ i }}</span></li>
+                              {% else %}
+                                <li><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                              {% endif %}
+                            {% endfor %}
+                            {% if blogdata.has_next %}
+                              <li><a href="?page={{ blogdata.next_page_number }}" class="page-link">&raquo;</a></li>
+                            {% else %}
+                              <li class="disabled"><span>&raquo;</span></li>
+                            {% endif %}
+                          </ul>
+                          </nav>
+                        {% endif %}
+                        </div>
+                        </div>
+                
+              
+         
+{% endblock content %}
+{% block javascripts %}
+
+<script>
+ function statusChange(event) {
+  console.log(event)
+  var element =event[0].attributes.value.value
+  alert(element)
+  
+ 
+
+  
+    var a=$("#ownInput1").val();
+    
+    console.log('event', event);
+    thisObj = event;
+    trObj = thisObj.closest('tr');
+    userId = trObj.find('td:last').text();
+    const body = {}
+    body['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val();
+    body['userId'] = userId
+    
+    
+    console.log('body', body);
+    $.ajax({
+      method: "POST",
+      url: '../statusOfUser',
+      data: body,
+      }).done( function(response){
+          console.log('success');
+          
+          location.reload();
+      }).fail( function(response){
+          console.log('failed');
+      }); 
+ }
+ </script>
+{% endblock javascripts %}
